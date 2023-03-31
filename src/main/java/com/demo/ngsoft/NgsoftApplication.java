@@ -18,11 +18,13 @@ public class NgsoftApplication {
 	}
 
 /*	@Bean
-	CommandLineRunner commandLineRunner(AuthenticationService service){
+	CommandLineRunner commandLineRunner(AuthenticationService service, UserRepo repo){
 		return args -> {
-			CreateUserRequest createAdmin = new CreateUserRequest("oren","orenv3@gmail",true,true,"1234");
-			System.out.println(service.registerUser(createAdmin));
-			;
+			if(repo.findByEmail("orenv3@gmail").isEmpty()) {
+				CreateUserRequest createAdmin = new CreateUserRequest("oren", "orenv3@gmail", true, true, "1234");
+				System.out.println(service.registerUser(createAdmin));
+
+			}
 		};
 	}*/
 

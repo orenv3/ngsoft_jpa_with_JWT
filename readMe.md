@@ -1,9 +1,12 @@
-http://localhost:8080/swagger-ui/index.html
+* swagger api-doc is in the swagger-api-doc.json file
 
-I did @ControllerAdvice.
+* I did @ControllerAdvice.
 However, I did not handle the errors catch via this controller.
+* I did input validation on CRUD queries.
+* Create task with the same title is forbidden
+* Creating user with the same email is forbidden 
 
-I did input validation on CRUD queries.
+
 
 1- register
 2- authenticate

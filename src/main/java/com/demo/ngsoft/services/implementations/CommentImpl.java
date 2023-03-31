@@ -5,35 +5,57 @@ import com.demo.ngsoft.entities.Comment;
 import com.demo.ngsoft.entities.Task;
 import com.demo.ngsoft.errorHandler.CommentGeneralErrorException;
 import com.demo.ngsoft.repositories.CommentRepo;
-import com.demo.ngsoft.repositories.TaskRepo;
-import com.demo.ngsoft.repositories.UserRepo;
+import com.demo.ngsoft.requestObjects.AddUserComment;
 import com.demo.ngsoft.requestObjects.CreateCommentRequest;
 import com.demo.ngsoft.requestObjects.UpdateCommentRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.demo.ngsoft.responseObjects.CommentsResponse;
+import com.demo.ngsoft.responseObjects.TaskTableResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Service("CommentImpl")
 public class CommentImpl {
 
-    @Autowired
-    CommentRepo commentRepo;
-    @Autowired
-    TaskRepo taskRepo;
-    @Autowired
-    UserRepo userRepo;
+    private final CommentRepo commentRepo;
+    private final TaskImpl taskRepo;
+    private final UserImpl userRepo;
 
     public Comment createComment(CreateCommentRequest commentObj) {
-        Task taskToComment = taskRepo.getReferenceById(commentObj.TaskId());
+        Task taskToComment = taskRepo.getTaskById(commentObj.TaskId());
         if (taskToComment.getAssignee() == null)
-            throw new CommentGeneralErrorException("Only the assigned user can comment the task: " + taskToComment);
+            throw new CommentGeneralErrorException("No assignee in the task: " + taskToComment);
 
         Comment comment = new Comment(commentObj);
         comment.setTaskId(taskToComment);
         comment.setUserId(taskToComment.getAssignee());
         return commentRepo.save(comment);
     }
+    public CommentsResponse userCommentOnTask(AddUserComment commentObj) {
+        Task taskToComment = taskRepo.getTaskById(commentObj.TaskId());
+        if (taskToComment.getAssignee() == null) {
+            throw new CommentGeneralErrorException("No assignee in the task: " + taskToComment);
+        }else if(taskToComment.getAssignee().getId() != commentObj.userId()){
+            throw new CommentGeneralErrorException("The user with id: "+commentObj.userId()+ " can not comment on task "+taskToComment);
+        }
+
+        Comment comment = new Comment(commentObj);
+        comment.setTaskId(taskToComment);
+        comment.setUserId(taskToComment.getAssignee());
+        Comment response = commentRepo.save(comment);
+        return new CommentsResponse(
+                response.getTimestamp(),
+                response.getComment(),
+                response.getUserId().getId(),
+                response.getTaskId().getId(),
+                response.getTaskId().getTitle(),
+                "Comment added successfully");
+    }
+
 
     public Comment updateComment(UpdateCommentRequest commentObj) {
         Comment comment = commentRepo.getReferenceById(commentObj.id());
@@ -44,5 +66,20 @@ public class CommentImpl {
     public List<Comment> getAllCommentList() {
         List<Comment> commentList = commentRepo.findAll();
         return commentList;
+    }
+    public List<CommentsResponse> getAllUserCommentList(long userId) {
+        List<TaskTableResponse> userTasks = taskRepo.getAllUserTaskList(userId);
+        List<String> taskNames = userTasks.stream().parallel().map(tsk -> tsk.title()).collect(Collectors.toList());
+        List<Comment> commentList = commentRepo.findByTaskId_TitleIn(taskNames);
+        List<CommentsResponse> response = new LinkedList<>();
+
+        commentList.stream().parallel().forEach(com ->
+                response.add(new CommentsResponse(
+                        com.getTimestamp(),
+                        com.getComment(),
+                        com.getUserId().getId(),
+                        com.getTaskId().getId(),
+                        com.getTaskId().getTitle(),"")));
+        return response;
     }
 }

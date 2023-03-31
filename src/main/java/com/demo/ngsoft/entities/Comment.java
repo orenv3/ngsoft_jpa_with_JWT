@@ -1,5 +1,6 @@
 package com.demo.ngsoft.entities;
 
+import com.demo.ngsoft.requestObjects.AddUserComment;
 import com.demo.ngsoft.requestObjects.CreateCommentRequest;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -17,6 +18,12 @@ public final class Comment {
     public Comment(CreateCommentRequest commentObj){
         this.comment = commentObj.comment();
         this.timestamp = new Date();
+    }
+
+    public Comment(AddUserComment commentObj){
+        this.comment = commentObj.comment();
+        this.timestamp = new Date();
+       // this.taskId.setId(commentObj.TaskId());
     }
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

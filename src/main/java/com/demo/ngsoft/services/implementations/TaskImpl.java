@@ -2,27 +2,32 @@ package com.demo.ngsoft.services.implementations;
 
 import com.demo.ngsoft.entities.Task;
 import com.demo.ngsoft.entities.User;
-import com.demo.ngsoft.errorHandler.ValidationErrorException;
+import com.demo.ngsoft.errorHandler.TaskGeneralErrorException;
 import com.demo.ngsoft.repositories.TaskRepo;
-import com.demo.ngsoft.repositories.UserRepo;
 import com.demo.ngsoft.requestObjects.*;
 import com.demo.ngsoft.responseObjects.TaskTableResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.demo.ngsoft.utils.TaskStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Service("TaskImpl")
 public class TaskImpl {
 
-    @Autowired
-    TaskRepo taskRepo;
-    @Autowired
-    UserRepo userRepo;
 
+    private final TaskRepo taskRepo;
+    private final UserImpl userImpl;
+    private TaskStatus taskStatus = new TaskStatus();
     public Task createTask(CreateTaskRequest taskObj){
         Task task = new Task(taskObj);
+        Optional<Task> checkDuplication = taskRepo.findByTitle(task.getTitle());
+        if(checkDuplication.isPresent())
+            throw new TaskGeneralErrorException("The Task already exists. Can not create task with the same title.");
         Task taskResponse =  taskRepo.save(task);
        return taskResponse;
     }
@@ -46,8 +51,25 @@ public class TaskImpl {
         return taskList;
     }
 
+    public List<TaskTableResponse> getAllUserTaskList(long assignee){
+        List<Task> taskList = taskRepo.getAllByAssignee(assignee,taskStatus.getARCHIVED());
+        List<TaskTableResponse> response = new LinkedList<>();
+                taskList.stream()
+                .parallel()
+                .forEach(tsk ->  response.add(new TaskTableResponse(
+                        tsk.getId(),
+                        tsk.getTitle(),
+                        tsk.getDescription(),
+                        tsk.getStatus(),
+                        tsk.getAssignee().getId(),
+                        ""
+                )));
+
+        return response;
+    }
+
     public TaskTableResponse assignUserToTask(long taskId, long userId){
-        User user = userRepo.getReferenceById(userId);
+        User user = userImpl.getUserById(userId);
         Task task = taskRepo.getReferenceById(taskId);
         String additionalMessage="";
         if(task.getAssignee() != null){
@@ -83,5 +105,18 @@ public class TaskImpl {
                 null, err + additionalMessage);
 
         return response;
+    }
+
+    public Task getTaskById(long id){
+       return  taskRepo.getReferenceById(id);
+    }
+
+    public String setTaskComplete(Long taskId) {
+       int check = taskRepo.updateTaskToComplete(taskId,taskStatus.getCOMPLETED());
+
+       if(check==0)
+        return "The update did not occurred. ";
+
+       return "Update successfully";
     }
 }

@@ -1,8 +1,8 @@
 package com.demo.ngsoft.responseObjects;
 
 public record TaskTableResponse(
-        Long task_id,
 
+        Long task_id,
         String title,
 
         String description,

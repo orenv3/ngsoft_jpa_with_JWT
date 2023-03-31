@@ -36,8 +36,8 @@ public final class Task {
     private User assignee;
 
   // @OneToMany(fetch = FetchType.EAGER, mappedBy = "taskId")
-    @Transient
-    private List<Comment> taskCommentsList;
+//    @Transient
+//    private List<Comment> taskCommentsList;
 
 
 }

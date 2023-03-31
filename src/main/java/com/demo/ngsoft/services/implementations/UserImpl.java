@@ -1,28 +1,28 @@
 package com.demo.ngsoft.services.implementations;
 
 import com.demo.ngsoft.entities.User;
+import com.demo.ngsoft.errorHandler.ValidationErrorException;
 import com.demo.ngsoft.repositories.UserRepo;
 import com.demo.ngsoft.requestObjects.CreateUserRequest;
 import com.demo.ngsoft.requestObjects.UpdateUserRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
-@Service("UserTypeImpl")
-public class UserTypeImpl {
- /* UserTableResponse response = new UserTableResponse(userResponse.getId(),
-                userResponse.getName(),
-                userResponse.getEmail(),
-                userResponse.isAdmin(),
-                userResponse.isActive(),
-                "create new user",
-                userResponse==null? "Something went wrong. The user did not create successfully.":"User created successfully");*/
+@RequiredArgsConstructor
+@Service("AdminUserImpl")
+public class UserImpl {
 
-    @Autowired
-    UserRepo userRepo;
+    private final UserRepo userRepo;
 
     public User createUser(CreateUserRequest userObj){
+         Optional<User> isUser = userRepo.findByEmail(userObj.email());
+        if(isUser.isPresent())
+           throw new ValidationErrorException("The user already exist");
         User user = new User(userObj);
         User userResponse =  userRepo.save(user);
        return userResponse;
@@ -42,7 +42,12 @@ public class UserTypeImpl {
 
 
     public List<User> getAllUserList(){
+        Optional<User> isUser = userRepo.findByEmail("aaa");
         List<User> usersList = userRepo.findAll();
         return usersList;
+    }
+
+    public User getUserById(long id){
+        return userRepo.getReferenceById(id);
     }
 }
