@@ -5,6 +5,12 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -12,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(name = "user")
-public final class User{// implements UserDetails {
+public final class User implements UserDetails {
 
 public User(CreateUserRequest createUserRequest){
     this.active = createUserRequest.active();
@@ -45,7 +51,7 @@ public User(CreateUserRequest createUserRequest){
     @Transient
     private Role role;
 
-   /* @Override
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(Role.chooseRole(this.isAdmin).name()));
     }
@@ -79,6 +85,6 @@ public User(CreateUserRequest createUserRequest){
     public boolean isEnabled() {
         return isActive();
     }
-*/
+
 
 }

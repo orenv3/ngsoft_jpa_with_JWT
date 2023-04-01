@@ -4,7 +4,7 @@ import com.demo.ngsoft.entities.Task;
 import com.demo.ngsoft.requestObjects.CreateTaskRequest;
 import com.demo.ngsoft.requestObjects.UpdateTaskRequest;
 import com.demo.ngsoft.responseObjects.TaskTableResponse;
-import com.demo.ngsoft.services.implementations.TaskImpl;
+import com.demo.ngsoft.dao.services.TaskService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 public class TaskController {
 
-    private final TaskImpl taskImpl;
+    private final TaskService taskService;
 
     /**
      * Admin privilege
@@ -31,7 +31,7 @@ public class TaskController {
      */
     @PostMapping("admin/createTask")
     public Task create(@Valid @RequestBody() CreateTaskRequest taskObj) {
-        return taskImpl.createTask(taskObj);
+        return taskService.createTask(taskObj);
     }
 
     /**
@@ -42,7 +42,7 @@ public class TaskController {
      */
     @DeleteMapping("admin/deleteTask/{id}")
     public String delete(@NotNull @PathVariable("id") long id) {
-        return taskImpl.deleteTask(id);
+        return taskService.deleteTask(id);
     }
 
     /**
@@ -53,7 +53,7 @@ public class TaskController {
      */
     @PutMapping("admin/updateTask")
     public Task update(@Valid @RequestBody() UpdateTaskRequest taskObj) {
-        return taskImpl.updateTask(taskObj);
+        return taskService.updateTask(taskObj);
     }
 
     /**
@@ -63,7 +63,7 @@ public class TaskController {
      */
     @GetMapping("admin/allTaskList")
     public List<Task> getAllTaskList(){
-        return taskImpl.getAllTaskList();
+        return taskService.getAllTaskList();
     }
 
     /**
@@ -75,7 +75,7 @@ public class TaskController {
      */
     @PutMapping("admin/assignUser{taskId}/{userId}")
     public TaskTableResponse assignUserToTask(@PathVariable("taskId") long taskId, @PathVariable("userId") long userId){
-        return taskImpl.assignUserToTask(taskId,userId);
+        return taskService.assignUserToTask(taskId,userId);
     }
 
     /**
@@ -86,7 +86,7 @@ public class TaskController {
      */
     @PutMapping("admin/removeUserFromTask/{taskId}")
     public TaskTableResponse removeUserFromTask(@PathVariable("taskId") long taskId){
-        return taskImpl.un_assignUserFromTask(taskId);
+        return taskService.un_assignUserFromTask(taskId);
     }
 
     /**
@@ -101,7 +101,7 @@ public class TaskController {
      */
     @GetMapping("user/allTaskList/{assignee}")
     public List<TaskTableResponse> getAllUserTaskList(@PathVariable("assignee") @Min(1) long assignee){
-        return taskImpl.getAllUserTaskList(assignee);
+        return taskService.getAllUserTaskList(assignee);
     }
 
     /**
@@ -112,7 +112,7 @@ public class TaskController {
      */
     @PutMapping("user/updateComplete")
     public String setTaskComplete(Long taskId) {
-        return taskImpl.setTaskComplete(taskId);
+        return taskService.setTaskComplete(taskId);
     }
 
 

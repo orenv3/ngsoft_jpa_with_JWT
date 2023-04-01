@@ -1,10 +1,11 @@
 package com.demo.ngsoft.controllers;
 
 
+import com.demo.ngsoft.dao.services.UserService;
 import com.demo.ngsoft.entities.User;
-import com.demo.ngsoft.requestObjects.CreateUserRequest;
 import com.demo.ngsoft.requestObjects.UpdateUserRequest;
-import com.demo.ngsoft.services.implementations.UserImpl;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -17,22 +18,15 @@ import java.util.List;
 @CrossOrigin("*")
 @Validated
 @RequiredArgsConstructor
-@RequestMapping("/api/user/")
+@SecurityRequirement(name = "bearerAuth")
+@Tag(name = "UserController", description = "The User API. Contains all the operations that can be performed on user table.")
+@RequestMapping("/api/userTable/")
 @RestController
 public class UserController {
 
-    private final UserImpl userImpl;
+    private final UserService userService;
 
-    /**
-     * Admin privilege
-     * create user
-     * @param userObj CreateUserRequest objectwith user details
-     * @return UserObject
-     */
-    @PostMapping("admin/createUser")
-    public User create(@Valid @RequestBody() CreateUserRequest userObj) {
-        return userImpl.createUser(userObj);
-    }
+
 
     /**
      * Admin privilege
@@ -42,7 +36,7 @@ public class UserController {
      */
     @DeleteMapping("admin/deleteUser/{id}")
     public String delete(@NotNull @Min(2) @PathVariable("id") long id) {//1 is default admin
-        return userImpl.deleteUser(id);
+        return userService.deleteUser(id);
     }
 
     /**
@@ -53,7 +47,7 @@ public class UserController {
      */
     @PutMapping("admin/updateUser")
     public User update(@Valid @RequestBody() UpdateUserRequest updateObj) {
-        return userImpl.updateUser(updateObj);
+        return userService.updateUser(updateObj);
     }
 
     /**
@@ -63,7 +57,7 @@ public class UserController {
      */
     @GetMapping("admin/allUserList")
     public List<User> getAllUserList(){
-        List<User> userList = userImpl.getAllUserList();
+        List<User> userList = userService.getAllUserList();
 
         return userList;
     }

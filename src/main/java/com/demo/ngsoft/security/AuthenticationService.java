@@ -1,4 +1,3 @@
-/*
 package com.demo.ngsoft.security;
 
 import com.demo.ngsoft.entities.Role;
@@ -27,7 +26,7 @@ public class AuthenticationService {
     public AuthResponse registerUser(CreateUserRequest registerRequest){
         Optional<User> checkDuplication = userRepo.findByEmail(registerRequest.email());
         if(checkDuplication.isPresent())
-            throw new ValidationErrorException("The user: "+registerRequest.email()+" already exists");//return new AuthResponse("This user already exists");
+            throw new ValidationErrorException("The user: "+registerRequest.email()+" already exists");
         User user = new User(registerRequest);
         user.setRole(Role.chooseRole(user.isAdmin()));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -52,4 +51,3 @@ public class AuthenticationService {
     }
 
 }
-*/

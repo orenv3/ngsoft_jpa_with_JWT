@@ -1,7 +1,6 @@
-/*
-package com.demo.ngsoft.security;
+package com.demo.ngsoft.configurations;
 
-import jakarta.servlet.Filter;
+import com.demo.ngsoft.security.AuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,8 +25,11 @@ public class SecurityConfiguration {
         http.csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**","/h2-console/**")
+                .requestMatchers(req->  req.getRequestURI().contains("/user/"))
+                .permitAll().
+                requestMatchers(req->  req.getRequestURI().contains("/swagger-ui/"))
                 .permitAll()
+                .requestMatchers(req-> req.getRequestURI().contains("/admin/")).hasAuthority("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -39,5 +41,6 @@ public class SecurityConfiguration {
 
         return http.build();
     }
+
+
 }
-*/

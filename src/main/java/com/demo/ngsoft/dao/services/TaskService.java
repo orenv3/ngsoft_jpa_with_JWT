@@ -1,4 +1,4 @@
-package com.demo.ngsoft.services.implementations;
+package com.demo.ngsoft.dao.services;
 
 import com.demo.ngsoft.entities.Task;
 import com.demo.ngsoft.entities.User;
@@ -13,15 +13,14 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service("TaskImpl")
-public class TaskImpl {
+public class TaskService {
 
 
     private final TaskRepo taskRepo;
-    private final UserImpl userImpl;
+    private final UserService userService;
     private TaskStatus taskStatus = new TaskStatus();
     public Task createTask(CreateTaskRequest taskObj){
         Task task = new Task(taskObj);
@@ -69,7 +68,7 @@ public class TaskImpl {
     }
 
     public TaskTableResponse assignUserToTask(long taskId, long userId){
-        User user = userImpl.getUserById(userId);
+        User user = userService.getUserById(userId);
         Task task = taskRepo.getReferenceById(taskId);
         String additionalMessage="";
         if(task.getAssignee() != null){

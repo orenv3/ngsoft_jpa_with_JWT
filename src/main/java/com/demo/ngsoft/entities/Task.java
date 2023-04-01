@@ -5,8 +5,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @NoArgsConstructor
 @Data
 @Entity
@@ -34,10 +32,6 @@ public final class Task {
     @ManyToOne
     @JoinColumn(name = "assignee")
     private User assignee;
-
-  // @OneToMany(fetch = FetchType.EAGER, mappedBy = "taskId")
-//    @Transient
-//    private List<Comment> taskCommentsList;
 
 
 }

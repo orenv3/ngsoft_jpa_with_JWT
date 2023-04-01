@@ -1,4 +1,3 @@
-/*
 package com.demo.ngsoft.controllers;
 
 import com.demo.ngsoft.requestObjects.CreateUserRequest;
@@ -9,28 +8,25 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin("*")
 @Validated
 @RequiredArgsConstructor
-@RestController("/api/auth")
+@RequestMapping("/api/auth/")
+@RestController
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
 
-    @PostMapping("/register")
+    @PostMapping("admin/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody CreateUserRequest registerRequest){
         return ResponseEntity.ok(authenticationService.registerUser(registerRequest));
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("user/authenticate")
     public ResponseEntity<AuthResponse> authenticate(@RequestBody AuthenticationRequest authRequest){
         return ResponseEntity.ok(authenticationService.authenticateUser(authRequest));
     }
 }
-*/

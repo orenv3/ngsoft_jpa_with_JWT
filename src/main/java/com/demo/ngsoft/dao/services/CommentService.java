@@ -1,4 +1,4 @@
-package com.demo.ngsoft.services.implementations;
+package com.demo.ngsoft.dao.services;
 
 
 import com.demo.ngsoft.entities.Comment;
@@ -19,11 +19,11 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service("CommentImpl")
-public class CommentImpl {
+public class CommentService {
 
     private final CommentRepo commentRepo;
-    private final TaskImpl taskRepo;
-    private final UserImpl userRepo;
+    private final TaskService taskRepo;
+    private final UserService userRepo;
 
     public Comment createComment(CreateCommentRequest commentObj) {
         Task taskToComment = taskRepo.getTaskById(commentObj.TaskId());

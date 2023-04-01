@@ -12,3 +12,8 @@ However, I did not handle the errors catch via this controller.
 2- authenticate
 3- set the given token in to the postman
 4- call needed API
+
+first object will always be:
+
+His token will be in the consul:
+AuthResponse(token=eyJhbGciOiJIUzI1NiJ9.sdfsd....)

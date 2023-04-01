@@ -4,27 +4,41 @@ import com.demo.ngsoft.entities.Role;
 import com.demo.ngsoft.entities.User;
 import com.demo.ngsoft.errorHandler.RestResponseEntityExceptionHandler;
 import com.demo.ngsoft.repositories.UserRepo;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
 @ComponentScan(basePackages = {"com.demo.ngsoft"})
+@Aspect
 @EntityScan(basePackages = "com.demo.ngsoft.entities")
 @EnableJpaRepositories(basePackages = "com.demo.ngsoft.repositories")
 @Import(RestResponseEntityExceptionHandler.class)
 @RequiredArgsConstructor
 @Configuration
 public class NgSoftConfiguration {
-/*
+
 
 private final UserRepo userRepo;
 
@@ -64,7 +78,25 @@ private final UserRepo userRepo;
     public PasswordEncoder passwordEncoder() {
        return  new BCryptPasswordEncoder();
     }
-*/
 
+    @AfterReturning(value = "execution(* com.demo.ngsoft.controllers..*.*(..))", returning = "returningObject")
+    public void afterEachPrintOutDbObject(JoinPoint join, Object returningObject){
+        System.out.println("Object from DB: " + returningObject);
+    }
+
+
+    @Bean
+    public OpenAPI customizeOpenAPI() {
+        final String securitySchemeName = "bearerAuth";
+        return new OpenAPI()
+                         .addSecurityItem(new SecurityRequirement()
+                         .addList(securitySchemeName))
+                         .components(new Components()
+                         .addSecuritySchemes(securitySchemeName, new SecurityScheme()
+                                .name(securitySchemeName)
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT")));
+    }
 
 }

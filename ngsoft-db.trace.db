@@ -61,7 +61,7 @@ SELECT * FROM comment as c WHERE c.taskId.title IN (?,?,?) [42122-214]
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
 	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:218)
 	at jdk.proxy2/jdk.proxy2.$Proxy112.getAllUserComments(Unknown Source)
-	at com.demo.ngsoft.services.implementations.CommentImpl.getAllUserCommentList(CommentImpl.java:72)
+	at CommentService.getAllUserCommentList(CommentImpl.java:72)
 	at com.demo.ngsoft.controllers.CommentController.getAllUserCommentList(CommentController.java:49)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:577)

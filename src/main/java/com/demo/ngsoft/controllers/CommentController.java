@@ -5,7 +5,7 @@ import com.demo.ngsoft.requestObjects.AddUserComment;
 import com.demo.ngsoft.requestObjects.CreateCommentRequest;
 import com.demo.ngsoft.requestObjects.UpdateCommentRequest;
 import com.demo.ngsoft.responseObjects.CommentsResponse;
-import com.demo.ngsoft.services.implementations.CommentImpl;
+import com.demo.ngsoft.dao.services.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 public class CommentController {
 
-    private final CommentImpl commentImpl;
+    private final CommentService commentService;
 
     /**
      * Admin privilege
@@ -30,7 +30,7 @@ public class CommentController {
      */
     @PostMapping("admin/createComment")
     public Comment create(@Valid @RequestBody() CreateCommentRequest commentObj) {
-        return commentImpl.createComment(commentObj);
+        return commentService.createComment(commentObj);
     }
 
     /**
@@ -41,7 +41,7 @@ public class CommentController {
      */
     @PutMapping("admin/updateComment")
     public Comment update(@Valid @RequestBody() UpdateCommentRequest commentObj) {
-        return commentImpl.updateComment(commentObj);
+        return commentService.updateComment(commentObj);
     }
 
 /**
@@ -50,7 +50,7 @@ public class CommentController {
  */
     @GetMapping("admin/allCommentList")
     public List<Comment> getAllCommentList(){
-        return commentImpl.getAllCommentList();
+        return commentService.getAllCommentList();
     }
 
 
@@ -62,7 +62,7 @@ public class CommentController {
      */
     @PostMapping("user/commentMyTask")
     public CommentsResponse userCommentOnTask(@Valid @RequestBody() AddUserComment commentObj) {
-        return commentImpl.userCommentOnTask(commentObj);
+        return commentService.userCommentOnTask(commentObj);
     }
 
 
@@ -75,7 +75,7 @@ public class CommentController {
      */
     @GetMapping("user/userCommentList/{userId}")
     public List<CommentsResponse> getAllUserCommentList( @PathVariable("userId") long userId){
-        return commentImpl.getAllUserCommentList(userId);
+        return commentService.getAllUserCommentList(userId);
     }
 
 

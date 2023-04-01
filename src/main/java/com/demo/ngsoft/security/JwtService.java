@@ -1,4 +1,3 @@
-/*
 package com.demo.ngsoft.security;
 
 import io.jsonwebtoken.Claims;
@@ -15,10 +14,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-*/
 /**
+ *
  * This service generates tokens AND validates tokens
- *//*
+ */
+
 
 @Service
 public class JwtService {
@@ -73,4 +73,3 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
-*/

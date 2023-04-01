@@ -23,7 +23,6 @@ public final class Comment {
     public Comment(AddUserComment commentObj){
         this.comment = commentObj.comment();
         this.timestamp = new Date();
-       // this.taskId.setId(commentObj.TaskId());
     }
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
