@@ -28,7 +28,7 @@ public class CommentService {
     public Comment createComment(CreateCommentRequest commentObj) {
         Task taskToComment = taskRepo.getTaskById(commentObj.TaskId());
         if (taskToComment.getAssignee() == null)
-            throw new CommentGeneralErrorException("No assignee in the task: " + taskToComment);
+            throw new CommentGeneralErrorException("In order to comment assignee in the task is a must. task: " + taskToComment);
 
         Comment comment = new Comment(commentObj);
         comment.setTaskId(taskToComment);
@@ -38,7 +38,7 @@ public class CommentService {
     public CommentsResponse userCommentOnTask(AddUserComment commentObj) {
         Task taskToComment = taskRepo.getTaskById(commentObj.TaskId());
         if (taskToComment.getAssignee() == null) {
-            throw new CommentGeneralErrorException("No assignee in the task: " + taskToComment);
+            throw new CommentGeneralErrorException("In order to comment assignee in the task is a must. task: " + taskToComment);
         }else if(taskToComment.getAssignee().getId() != commentObj.userId()){
             throw new CommentGeneralErrorException("The user with id: "+commentObj.userId()+ " can not comment on task "+taskToComment);
         }

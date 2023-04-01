@@ -2,7 +2,7 @@ package com.demo.ngsoft;
 
 import com.demo.ngsoft.entities.Role;
 import com.demo.ngsoft.entities.User;
-import com.demo.ngsoft.errorHandler.RestResponseEntityExceptionHandler;
+import com.demo.ngsoft.errorHandler.GeneralExceptionHandler;
 import com.demo.ngsoft.repositories.UserRepo;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -34,7 +34,7 @@ import java.util.Optional;
 @Aspect
 @EntityScan(basePackages = "com.demo.ngsoft.entities")
 @EnableJpaRepositories(basePackages = "com.demo.ngsoft.repositories")
-@Import(RestResponseEntityExceptionHandler.class)
+@Import(GeneralExceptionHandler.class)
 @RequiredArgsConstructor
 @Configuration
 public class NgSoftConfiguration {
@@ -84,19 +84,17 @@ private final UserRepo userRepo;
         System.out.println("Object from DB: " + returningObject);
     }
 
-
     @Bean
     public OpenAPI customizeOpenAPI() {
         final String securitySchemeName = "bearerAuth";
         return new OpenAPI()
-                         .addSecurityItem(new SecurityRequirement()
-                         .addList(securitySchemeName))
-                         .components(new Components()
-                         .addSecuritySchemes(securitySchemeName, new SecurityScheme()
+                .addSecurityItem(new SecurityRequirement()
+                        .addList(securitySchemeName))
+                        .components(new Components()
+                        .addSecuritySchemes(securitySchemeName, new SecurityScheme()
                                 .name(securitySchemeName)
                                 .type(SecurityScheme.Type.HTTP)
                                 .scheme("bearer")
                                 .bearerFormat("JWT")));
     }
-
 }

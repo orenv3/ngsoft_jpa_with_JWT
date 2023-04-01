@@ -4,7 +4,8 @@ import com.demo.ngsoft.entities.Task;
 import com.demo.ngsoft.entities.User;
 import com.demo.ngsoft.errorHandler.TaskGeneralErrorException;
 import com.demo.ngsoft.repositories.TaskRepo;
-import com.demo.ngsoft.requestObjects.*;
+import com.demo.ngsoft.requestObjects.CreateTaskRequest;
+import com.demo.ngsoft.requestObjects.UpdateTaskRequest;
 import com.demo.ngsoft.responseObjects.TaskTableResponse;
 import com.demo.ngsoft.utils.TaskStatus;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,9 @@ public class TaskService {
     private final TaskRepo taskRepo;
     private final UserService userService;
     private TaskStatus taskStatus = new TaskStatus();
-    public Task createTask(CreateTaskRequest taskObj){
+    public Task createTask(CreateTaskRequest taskObj) throws TaskGeneralErrorException {
+        TaskStatus taskStatus = new TaskStatus();
+        taskObj.gotValidationException(taskStatus);
         Task task = new Task(taskObj);
         Optional<Task> checkDuplication = taskRepo.findByTitle(task.getTitle());
         if(checkDuplication.isPresent())
@@ -31,7 +34,7 @@ public class TaskService {
        return taskResponse;
     }
 
-    public Task updateTask(UpdateTaskRequest taskObj){
+    public Task updateTask(UpdateTaskRequest taskObj) throws TaskGeneralErrorException {
         Task task = taskRepo.getReferenceById(taskObj.id());
         task = taskObj.updateTaskParameters(taskObj,task);
         Task taskResponse =  taskRepo.save(task);

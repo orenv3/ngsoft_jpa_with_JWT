@@ -2,7 +2,7 @@ package com.demo.ngsoft.security;
 
 import com.demo.ngsoft.entities.Role;
 import com.demo.ngsoft.entities.User;
-import com.demo.ngsoft.errorHandler.ValidationErrorException;
+import com.demo.ngsoft.errorHandler.UserValidationErrorException;
 import com.demo.ngsoft.repositories.UserRepo;
 import com.demo.ngsoft.requestObjects.CreateUserRequest;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +23,10 @@ public class AuthenticationService {
     private AuthenticationManager authMng;
 
 
-    public AuthResponse registerUser(CreateUserRequest registerRequest){
+    public AuthResponse registerUser(CreateUserRequest registerRequest) throws UserValidationErrorException {
         Optional<User> checkDuplication = userRepo.findByEmail(registerRequest.email());
         if(checkDuplication.isPresent())
-            throw new ValidationErrorException("The user: "+registerRequest.email()+" already exists");
+            throw new UserValidationErrorException("The user: "+registerRequest.email()+" already exists");
         User user = new User(registerRequest);
         user.setRole(Role.chooseRole(user.isAdmin()));
         user.setPassword(passwordEncoder.encode(user.getPassword()));

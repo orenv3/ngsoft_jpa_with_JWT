@@ -20,7 +20,9 @@ public class NgsoftApplication {
 	CommandLineRunner commandLineRunner(AuthenticationService service, UserRepo repo){
 		return args -> {
 
-				CreateUserRequest createAdmin = new CreateUserRequest("oren", "orenv@vinogura", true, true, "1234");
+				CreateUserRequest createAdmin =
+						new CreateUserRequest("oren", "orenv@vinogura",
+								true, true, "1234");
 				System.out.println(service.registerUser(createAdmin));
 
 

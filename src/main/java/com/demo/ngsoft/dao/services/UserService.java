@@ -15,16 +15,6 @@ public class UserService {
 
     private final UserRepo userRepo;
 
-   /* public User createUser(CreateUserRequest userObj PasswordEncoder passwordEncoder){
-        Optional<User> checkDuplication = userRepo.findByEmail(registerRequest.email());
-        if(checkDuplication.isPresent())
-            throw new ValidationErrorException("The user: "+registerRequest.email()+" already exists");//return new AuthResponse("This user already exists");
-        User user = new User(registerRequest);
-        user.setRole(Role.chooseRole(user.isAdmin()));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepo.save(user);
-        return this.generateTokenByUser(user);
-    }*/
     public User updateUser(UpdateUserRequest updateObj){
         User user = userRepo.getReferenceById(updateObj.id());
         user = updateObj.updateUserParameters(updateObj,user);

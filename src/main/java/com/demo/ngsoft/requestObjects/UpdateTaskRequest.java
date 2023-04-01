@@ -1,7 +1,7 @@
 package com.demo.ngsoft.requestObjects;
 
 import com.demo.ngsoft.entities.Task;
-import com.demo.ngsoft.errorHandler.ValidationErrorException;
+import com.demo.ngsoft.errorHandler.TaskGeneralErrorException;
 import com.demo.ngsoft.utils.TaskStatus;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -16,7 +16,7 @@ public record UpdateTaskRequest(
 
 ){
 
-    public Task updateTaskParameters(UpdateTaskRequest updateObj, Task task){
+    public Task updateTaskParameters(UpdateTaskRequest updateObj, Task task) throws TaskGeneralErrorException {
 
         if(updateObj.isTitle())
             task.setTitle(updateObj.title());
@@ -25,7 +25,7 @@ public record UpdateTaskRequest(
         if(updateObj.isStatus()){
             TaskStatus taskStatus = new TaskStatus();
             if (!(taskStatus.isValidStatus(status)))
-                throw new ValidationErrorException("The status:" + status +
+                throw new TaskGeneralErrorException("The status:" + status +
                         " is not valid. \n Please enter one of the following: " + taskStatus.getStatusOptions());
             task.setStatus(updateObj.status());
         }

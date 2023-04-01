@@ -18,7 +18,6 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
@@ -26,8 +25,8 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
-    public RestResponseEntityExceptionHandler() {
+public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
+    public GeneralExceptionHandler() {
         super();
     }
 
@@ -42,6 +41,20 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     }
 
 
+    @ExceptionHandler({ UserValidationErrorException.class })
+    protected ResponseEntity<Object> handleValidationErrorException(Exception e, WebRequest request) {
+        return  ResponseEntity.ok(e.getMessage());
+    }
+
+    @ExceptionHandler({ TaskGeneralErrorException.class })
+    protected ResponseEntity<Object> handleTaskGeneralErrorException(Exception e, WebRequest request) {
+        return  ResponseEntity.ok(e.getMessage());
+    }
+
+    @ExceptionHandler({ CommentGeneralErrorException.class })
+    protected ResponseEntity<Object> handleCommentGeneralErrorException(Exception e, WebRequest request) {
+        return  ResponseEntity.ok(e.getMessage());
+    }
     @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         return super.handleHttpRequestMethodNotSupported(ex, headers, status, request);

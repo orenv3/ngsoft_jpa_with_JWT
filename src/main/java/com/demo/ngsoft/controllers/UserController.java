@@ -19,7 +19,8 @@ import java.util.List;
 @Validated
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
-@Tag(name = "UserController", description = "The User API. Contains all the operations that can be performed on user table.")
+@Tag(name = "UserController", description = "The User API. " +
+        "Contains all the operations that can be performed on User table.")
 @RequestMapping("/api/userTable/")
 @RestController
 public class UserController {

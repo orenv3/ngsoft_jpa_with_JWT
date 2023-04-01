@@ -1,10 +1,13 @@
 package com.demo.ngsoft.controllers;
 
+import com.demo.ngsoft.dao.services.TaskService;
 import com.demo.ngsoft.entities.Task;
+import com.demo.ngsoft.errorHandler.TaskGeneralErrorException;
 import com.demo.ngsoft.requestObjects.CreateTaskRequest;
 import com.demo.ngsoft.requestObjects.UpdateTaskRequest;
 import com.demo.ngsoft.responseObjects.TaskTableResponse;
-import com.demo.ngsoft.dao.services.TaskService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -17,6 +20,9 @@ import java.util.List;
 @CrossOrigin("*")
 @Validated
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
+@Tag(name = "TaskController", description = "The Task API." +
+        " Contains all the operations that can be performed on Task table.")
 @RequestMapping("/api/task/")
 @RestController
 public class TaskController {
@@ -30,15 +36,15 @@ public class TaskController {
      * @return
      */
     @PostMapping("admin/createTask")
-    public Task create(@Valid @RequestBody() CreateTaskRequest taskObj) {
+    public Task create(@Valid @RequestBody() CreateTaskRequest taskObj) throws TaskGeneralErrorException {
         return taskService.createTask(taskObj);
     }
 
     /**
      * Admin privilege
      * Delete Task by ID
-     * @param id
-     * @return
+     * @param id task id
+     * @return String succeed
      */
     @DeleteMapping("admin/deleteTask/{id}")
     public String delete(@NotNull @PathVariable("id") long id) {
@@ -52,7 +58,7 @@ public class TaskController {
      * @return
      */
     @PutMapping("admin/updateTask")
-    public Task update(@Valid @RequestBody() UpdateTaskRequest taskObj) {
+    public Task update(@Valid @RequestBody() UpdateTaskRequest taskObj) throws TaskGeneralErrorException {
         return taskService.updateTask(taskObj);
     }
 

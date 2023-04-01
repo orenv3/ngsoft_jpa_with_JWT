@@ -6,6 +6,8 @@ import com.demo.ngsoft.requestObjects.CreateCommentRequest;
 import com.demo.ngsoft.requestObjects.UpdateCommentRequest;
 import com.demo.ngsoft.responseObjects.CommentsResponse;
 import com.demo.ngsoft.dao.services.CommentService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -16,6 +18,9 @@ import java.util.List;
 @CrossOrigin("*")
 @Validated
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
+@Tag(name = "CommentController", description = "The Comment API. " +
+        "Contains all the operations that can be performed on Comment table.")
 @RequestMapping("/api/comment/")
 @RestController
 public class CommentController {
