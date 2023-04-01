@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.demo</groupId>
 	<artifactId>ngsoft</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1</version>
 	<name>ngsoft</name>
 	<description>ngsoft project</description>
 	<properties>

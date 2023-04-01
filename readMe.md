@@ -1,4 +1,5 @@
-* localhost:8080/swagger-ui.html: swagger works with relevant token
+* run app via CMD: java -jar ngsoft-0.1.jar
+* localhost:8080/swagger-ui.html: swagger works with bearer token
 
 * @ControllerAdvice enabled
 * Validation on CRUD queries.
