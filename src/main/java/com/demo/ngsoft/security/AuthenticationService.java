@@ -1,6 +1,6 @@
 package com.demo.ngsoft.security;
 
-import com.demo.ngsoft.entities.Role;
+import com.demo.ngsoft.utils.Role;
 import com.demo.ngsoft.entities.User;
 import com.demo.ngsoft.errorHandler.UserValidationErrorException;
 import com.demo.ngsoft.repositories.UserRepo;
@@ -20,7 +20,7 @@ public class AuthenticationService {
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private AuthenticationManager authMng;
+    private final AuthenticationManager authMng;
 
 
     public AuthResponse registerUser(CreateUserRequest registerRequest) throws UserValidationErrorException {

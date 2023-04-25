@@ -1,6 +1,6 @@
-package com.demo.ngsoft;
+package com.demo.ngsoft.configurations;
 
-import com.demo.ngsoft.entities.Role;
+import com.demo.ngsoft.utils.Role;
 import com.demo.ngsoft.entities.User;
 import com.demo.ngsoft.errorHandler.GeneralExceptionHandler;
 import com.demo.ngsoft.repositories.UserRepo;
@@ -61,11 +61,12 @@ private final UserRepo userRepo;
         };
         return userDetailsService;
     }
+
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(getUserDetailsService());
-        provider.setPasswordEncoder(passwordEncoder());
+        provider.setUserDetailsService(getUserDetailsService());// set how to fetch user details / with which service etc
+        provider.setPasswordEncoder(passwordEncoder()); // set in which password encoder we want to use to encode the password
         return provider;
     }
 

@@ -31,4 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
-ngsoft-db.mv.db
+### H2 ##
+*.mv.db
+*.trace.db

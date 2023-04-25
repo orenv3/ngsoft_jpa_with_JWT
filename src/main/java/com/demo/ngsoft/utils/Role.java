@@ -1,4 +1,4 @@
-package com.demo.ngsoft.entities;
+package com.demo.ngsoft.utils;
 
 public enum Role {
     USER,

@@ -10,6 +10,7 @@ import com.demo.ngsoft.requestObjects.CreateCommentRequest;
 import com.demo.ngsoft.requestObjects.UpdateCommentRequest;
 import com.demo.ngsoft.responseObjects.CommentsResponse;
 import com.demo.ngsoft.responseObjects.TaskTableResponse;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,8 @@ public class CommentService {
     private final CommentRepo commentRepo;
     private final TaskService taskRepo;
     private final UserService userRepo;
+    private final EntityManager entityManager;
+
 
     public Comment createComment(CreateCommentRequest commentObj) {
         Task taskToComment = taskRepo.getTaskById(commentObj.TaskId());
@@ -82,4 +85,31 @@ public class CommentService {
                         com.getTaskId().getTitle(),"")));
         return response;
     }
+
+    public List<CommentsResponse> getAllUserCommentListViaNativeQuery(long userId) {
+
+        List<Comment> commentList = entityManager.createQuery("""
+    SELECT c 
+     FROM Comment c 
+     WHERE c.taskId IN ( SELECT t.id
+     FROM Task t 
+     WHERE c.taskId = t.id 
+     AND t.status != 'ARCHIVED' 
+     AND t.assignee.id = :userId)""", Comment.class)
+                .setParameter("userId", userId)
+                .getResultList();
+
+        List<CommentsResponse> response = new LinkedList<>();
+        commentList.stream().parallel().forEach(com ->
+                response.add(new CommentsResponse(
+                        com.getTimestamp(),
+                        com.getComment(),
+                        com.getUserId().getId(),
+                        com.getTaskId().getId(),
+                        com.getTaskId().getTitle(),"")));
+        return response;
+    }
+
+
+
 }

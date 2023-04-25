@@ -1,8 +1,6 @@
 package com.demo.ngsoft.repositories;
 
 import com.demo.ngsoft.entities.Task;
-import com.demo.ngsoft.entities.User;
-import jakarta.persistence.Transient;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,11 +13,14 @@ import java.util.Optional;
 
 @Repository
 public interface TaskRepo extends JpaRepository<Task, Long> {
-    @Query("From Task where assignee.id = :assignee and status != :arch")
+
+    @Query("FROM Task WHERE assignee.id = :assignee AND status != :arch")
     List<Task> getAllByAssignee(@Param("assignee")long assignee,@Param("arch") String status);
     Optional<Task> findByTitle(String title);
+
     @Transactional
-    @Modifying
+    @Modifying(clearAutomatically = true) // after changing the persistence context become old.
+                                        // Via method clear() we force/make sure that persistence context will fetch the new details from DB next time
     @Query("UPDATE Task t SET t.status = :completed WHERE t.id = :taskId")
-    Integer  updateTaskToComplete(Long taskId, String completed);
+    Integer updateTaskToComplete(long taskId, String completed);
 }

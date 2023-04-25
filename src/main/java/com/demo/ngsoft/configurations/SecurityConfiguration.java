@@ -19,7 +19,7 @@ public class SecurityConfiguration {
     private final AuthFilter authFilter;
     private final AuthenticationProvider authProvider;
 
-    @Bean
+    @Bean // SecurityFilterChain is responsible/config for all http security of our APP
     public SecurityFilterChain getSecurityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf()
@@ -29,6 +29,8 @@ public class SecurityConfiguration {
                 .permitAll()
                 .requestMatchers(req->  req.getRequestURI().contains("api-docs"))
                 .permitAll()
+                .requestMatchers(req->  req.getRequestURI().contains("/auth/login"))
+                .permitAll()
                 .requestMatchers(req->  req.getRequestURI().contains("/user/")).hasAuthority("USER")
                 .requestMatchers(req-> req.getRequestURI().contains("/admin/")).hasAuthority("ADMIN")
                 .anyRequest()
@@ -37,8 +39,12 @@ public class SecurityConfiguration {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                //AuthenticationProvider --> Data access object which responsible to fetch user details/encode password etc.
+                // an Authentication request is processed by an AuthenticationProvider,
                 .authenticationProvider(authProvider)
+                //UsernamePasswordAuthenticationFilter  by default responds to the URL /login. Therefor authFilter need to be first
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }

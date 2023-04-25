@@ -83,6 +83,11 @@ public class CommentController {
         return commentService.getAllUserCommentList(userId);
     }
 
+    @GetMapping("user/userCommentListViaNativeQuery/{userId}")
+    public List<CommentsResponse> getAllUserCommentListViaNativeQuery( @PathVariable("userId") long userId){
+        return commentService.getAllUserCommentListViaNativeQuery(userId);
+    }
+
 
 
 }

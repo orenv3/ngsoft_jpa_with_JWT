@@ -1,5 +1,6 @@
 package com.demo.ngsoft.security;
 
+import com.demo.ngsoft.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -16,7 +17,10 @@ import java.util.function.Function;
 
 /**
  *
- * This service generates tokens AND validates tokens
+ * This service
+ * generates tokens
+ * validates tokens
+ * manipulate token - extract email etc
  */
 
 
@@ -34,13 +38,15 @@ public class JwtService {
     }
     public String generateToken(Map<String,Object> ngSoftClaims,
                                 UserDetails userDetails){
+
+        ngSoftClaims.put("role",((User)userDetails).getRole().name());
         return Jwts.builder()
                 .setClaims(ngSoftClaims)
                 .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setIssuedAt(new Date(System.currentTimeMillis())) // when the claim created helps to calc the exp
                 .setExpiration(new Date(System.currentTimeMillis() + 1000*60*60*48))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                .compact();
+                .compact(); // generates the token
     }
 
     public <T> T extractClaim(String token, Function<Claims,T> getClaim){
@@ -49,10 +55,11 @@ public class JwtService {
     }
 
     public Claims extractAllClaims(String token){
-        return Jwts.parserBuilder()
-                .setSigningKey(getSignInKey())//signature
+        return Jwts.parserBuilder()// in order to parse the token
+                .setSigningKey(getSignInKey())// when we encode or generates token we use the signingKey
+                                             // signingKey --> the signature in the JWS verify that is not change and the sender is the same
                 .build()
-                .parseClaimsJws(token)
+                .parseClaimsJws(token)//after the build we can call/parse the token to JWS (JSON Web Signature)
                 .getBody();
     }
 
@@ -68,8 +75,9 @@ public class JwtService {
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
+
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
-        return Keys.hmacShaKeyFor(keyBytes);
+        return Keys.hmacShaKeyFor(keyBytes); // hmacSha is a type of keyed hash algorithm
     }
 }

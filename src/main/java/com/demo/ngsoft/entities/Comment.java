@@ -35,7 +35,7 @@ public final class Comment {
     private String comment;
 
     @ManyToOne
-    @JoinColumn(name = "UserId")
+    @JoinColumn(name = "userId")
     private User userId;
      //(foreign key)
 

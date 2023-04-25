@@ -30,7 +30,6 @@ public class UserService {
 
 
     public List<User> getAllUserList(){
-        Optional<User> isUser = userRepo.findByEmail("aaa");
         List<User> usersList = userRepo.findAll();
         return usersList;
     }
@@ -41,4 +40,5 @@ public class UserService {
     public Optional<User> findUserByEmail(String email){
         return userRepo.findByEmail(email);
     }
+
 }

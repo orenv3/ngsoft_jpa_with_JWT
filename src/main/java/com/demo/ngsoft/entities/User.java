@@ -1,6 +1,7 @@
 package com.demo.ngsoft.entities;
 
 import com.demo.ngsoft.requestObjects.CreateUserRequest;
+import com.demo.ngsoft.utils.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
