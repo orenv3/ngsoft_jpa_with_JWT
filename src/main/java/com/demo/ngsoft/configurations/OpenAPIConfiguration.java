@@ -7,12 +7,11 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.context.annotation.Configuration;
 
-@OpenAPIDefinition(info = @Info(title = "My API"))
+@OpenAPIDefinition(info = @Info(title = "NgSoft-API"))
 @SecurityScheme(
         name = "bearerAuth",
         type = SecuritySchemeType.HTTP,
         scheme = "bearer"
-//        scheme = "basic"
 )
 @Configuration
 public class OpenAPIConfiguration {

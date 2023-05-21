@@ -9,11 +9,13 @@ import com.demo.ngsoft.requestObjects.UpdateTaskRequest;
 import com.demo.ngsoft.responseObjects.TaskTableResponse;
 import com.demo.ngsoft.utils.TaskStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service("TaskImpl")
@@ -53,19 +55,22 @@ public class TaskService {
         return taskList;
     }
 
+    public List<Task> getAllTaskListWithPageRequest(int pageNo, int pageSize){
+        Pageable pageable = PageRequest.of(pageNo,pageSize);
+        return  taskRepo.findAll(pageable).getContent();
+    }
+
     public List<TaskTableResponse> getAllUserTaskList(long assignee){
         List<Task> taskList = taskRepo.getAllByAssignee(assignee,taskStatus.getARCHIVED());
-        List<TaskTableResponse> response = new LinkedList<>();
-                taskList.stream()
-                .parallel()
-                .forEach(tsk ->  response.add(new TaskTableResponse(
-                        tsk.getId(),
-                        tsk.getTitle(),
-                        tsk.getDescription(),
-                        tsk.getStatus(),
-                        tsk.getAssignee().getId(),
-                        ""
-                )));
+        List<TaskTableResponse> response = taskList.stream()
+                .parallel().map(tsk -> new TaskTableResponse(
+                                tsk.getId(),
+                                tsk.getTitle(),
+                                tsk.getDescription(),
+                                tsk.getStatus(),
+                                tsk.getAssignee().getId(),
+                                ""
+                        )).collect(Collectors.toList());
 
         return response;
     }

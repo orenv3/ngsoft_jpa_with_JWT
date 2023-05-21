@@ -1,0 +1,55 @@
+Write a Spring Boot application that exposes a RESTful API for managing a list of tasks and users.
+The API should allow clients to perform the following actions:
+
+   * Login and retrieve an oauth2 bearer token, to be used for the below actions!
+    * Retrieve the list of tasks
+    * Add a new task to the list
+    * Update the details of a task
+    * Mark a task as completed
+    * Remove a task from the list
+    * Retrieve the list of users
+    * Add a new user to the list
+    * Update the details of a user
+    * Remove a user from the list
+    * Add comment to task
+
+Tables:
+ task:
+     ID (generated automatically)
+     Title
+     Description
+     Status (pending/completed/archived)
+     Assignee (user to whom the task is assigned)
+
+ Comment:
+    ID (generated automatically)
+    UserId (foreign key)
+    TaskId (foreign key)
+    TimeStamp (Date)
+    Comment (Text)
+
+ user:
+     ID (generated automatically)
+     Name
+     Email
+     IsAdmin (true,false)
+     Active (true,false)
+     Password (hashed)
+
+ Description:
+    1. Make sure that user can only fetch and see his tasks.
+    2. When he sees the task he may see ALL Comments (even if he did not make them).
+    3. User can:
+        a. view his tasks and their comments,
+        b. comment on his tasks,
+        c. mark as completed.
+    4. Admin can:
+        a. create users,
+        b. activate/deactivate user,
+        c. create tasks,
+        d. assign/re-assign tasks,
+        e. comment on tasks and
+        f. mark completed tasks as archived
+    5. An archived task is not visible to the user.
+    6. Use an in-memory database (such as H2) to store the tasks and users.
+    7. Implement password hashing and authentication/authorization for the user API using Spring Security

@@ -19,7 +19,7 @@ public class SecurityConfiguration {
     private final AuthFilter authFilter;
     private final AuthenticationProvider authProvider;
 
-    @Bean // SecurityFilterChain is responsible/config for all http security of our APP
+    @Bean // SecurityFilterChain is responsible/config for all the traffic and filters of http of our APP
     public SecurityFilterChain getSecurityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf()
@@ -48,6 +48,4 @@ public class SecurityConfiguration {
 
         return http.build();
     }
-
-
 }

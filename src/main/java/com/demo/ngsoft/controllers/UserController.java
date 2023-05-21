@@ -63,5 +63,15 @@ public class UserController {
         return userList;
     }
 
+    /**
+     * Admin privilege
+     * Get list of all user in DB with PAGINATION
+     * @return List<User>
+     */
+    @GetMapping("admin/allUserListWithPagination")
+    public List<User> getAllUserListWithPagination(@NotNull int pageNumber, @NotNull int pageSize){
+        return userService.getAllUserListWithPageRequest(pageNumber, pageSize);
+    }
+
 
 }

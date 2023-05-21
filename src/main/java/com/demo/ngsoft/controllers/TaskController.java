@@ -72,6 +72,16 @@ public class TaskController {
         return taskService.getAllTaskList();
     }
 
+ /**
+     * Admin privilege
+     * Get list of all task in the DB with PAGINATION
+     * @return
+     */
+    @GetMapping("admin/allTaskListWithPagination")
+    public List<Task> getAllTaskListWithPagination(@NotNull int pageNo, @NotNull int pageSize){
+        return taskService.getAllTaskListWithPageRequest(pageNo,pageSize);
+    }
+
     /**
      * Admin privilege
      * Assign task to a user

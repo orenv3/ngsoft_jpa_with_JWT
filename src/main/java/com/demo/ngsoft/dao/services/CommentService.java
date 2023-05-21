@@ -14,7 +14,6 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,15 +73,15 @@ public class CommentService {
         List<TaskTableResponse> userTasks = taskRepo.getAllUserTaskList(userId);
         List<String> taskNames = userTasks.stream().parallel().map(tsk -> tsk.title()).collect(Collectors.toList());
         List<Comment> commentList = commentRepo.findByTaskId_TitleIn(taskNames);
-        List<CommentsResponse> response = new LinkedList<>();
 
-        commentList.stream().parallel().forEach(com ->
-                response.add(new CommentsResponse(
+        List<CommentsResponse> response =  commentList.stream().parallel().map(com ->
+                new CommentsResponse(
                         com.getTimestamp(),
                         com.getComment(),
                         com.getUserId().getId(),
                         com.getTaskId().getId(),
-                        com.getTaskId().getTitle(),"")));
+                        com.getTaskId().getTitle(),"")).collect(Collectors.toList());
+
         return response;
     }
 
@@ -99,14 +98,14 @@ public class CommentService {
                 .setParameter("userId", userId)
                 .getResultList();
 
-        List<CommentsResponse> response = new LinkedList<>();
-        commentList.stream().parallel().forEach(com ->
-                response.add(new CommentsResponse(
+
+        List<CommentsResponse> response = commentList.stream().parallel().map(com ->
+                new CommentsResponse(
                         com.getTimestamp(),
                         com.getComment(),
                         com.getUserId().getId(),
                         com.getTaskId().getId(),
-                        com.getTaskId().getTitle(),"")));
+                        com.getTaskId().getTitle(),"")).collect(Collectors.toList());
         return response;
     }
 
