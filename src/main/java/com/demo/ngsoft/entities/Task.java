@@ -29,6 +29,7 @@ public final class Task {
     @Column
     private String status; //(pending/completed/archived)
 
+    // Many tasks to one user
     @ManyToOne
     @JoinColumn(name = "assignee")
     private User assignee;

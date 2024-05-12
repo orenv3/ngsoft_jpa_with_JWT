@@ -34,11 +34,16 @@ public final class Comment {
     @Column
     private String comment;
 
+
+    // Many comments to one user
+    // Many tasks to one user
     @ManyToOne
     @JoinColumn(name = "userId")
     private User userId;
      //(foreign key)
 
+
+    // Many comments to one task
     @ManyToOne
     @JoinColumn(name = "taskId")
     private Task taskId;

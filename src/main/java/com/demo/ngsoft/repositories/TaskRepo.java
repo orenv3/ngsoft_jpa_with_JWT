@@ -19,7 +19,7 @@ public interface TaskRepo extends JpaRepository<Task, Long> {
     Optional<Task> findByTitle(String title);
 
     @Transactional
-    @Modifying(clearAutomatically = true) // after changing the persistence context become old.
+    @Modifying(clearAutomatically = true) // After changing the persistence context become old.
                                         // Via method clear() we force/make sure that persistence context will fetch the new details from DB next time
     @Query("UPDATE Task t SET t.status = :completed WHERE t.id = :taskId")
     Integer updateTaskToComplete(long taskId, String completed);
